@@ -11,7 +11,21 @@ const font = Poppins({
 export default function Logo() {
   return (
     <div className="hidden md:flex items-center gap-x-2">
-      <Image src="/logo.svg" width={40} height={40} alt="Logo" />
+      <Image
+        src="/logo.svg"
+        width={40}
+        height={40}
+        alt="Logo"
+        className="dark:hidden "
+      />
+
+      <Image
+        src="/logo-dark.svg"
+        width={40}
+        height={40}
+        alt="Logo"
+        className="dark:block hidden"
+      />
 
       <p className={cn("font-semibold", font.className)}>Josion</p>
     </div>

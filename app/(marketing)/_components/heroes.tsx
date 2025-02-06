@@ -9,15 +9,27 @@ export default function Heroes() {
           <Image
             src={"/documents.png"}
             fill
-            className="object-contain"
+            className="object-contain dark:hidden"
             alt="Documents"
+          />
+          <Image
+            src={"/documents-dark.png"}
+            fill
+            className="object-contain dark:block hidden"
+            alt="Documents Dark"
           />
         </div>
         <div className="relative w-[300px] h-[300px] hidden md:block">
           <Image
             src={"/reading.png"}
             fill
-            className="object-contain"
+            className="object-contain dark:hidden"
+            alt="Reading"
+          />
+          <Image
+            src={"/reading-dark.png"}
+            fill
+            className="object-contain dark:block hidden"
             alt="Reading"
           />
         </div>
