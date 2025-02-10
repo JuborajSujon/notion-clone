@@ -16,7 +16,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-import { usePathname } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import { ElementRef, useEffect, useRef, useState } from "react";
 import { useMediaQuery } from "usehooks-ts";
 import UserItem from "./user-item";
@@ -28,11 +28,13 @@ import { DocumentList } from "./document-list";
 import TrashBox from "./trash-box";
 import { useSearch } from "@/hooks/use-search";
 import { useSettings } from "@/hooks/use-setting";
+import Navbar from "./navbar";
 
 export default function Navigation() {
   const settings = useSettings();
   const search = useSearch();
   const pathName = usePathname();
+  const params = useParams();
   const isMobile = useMediaQuery("(max-width: 768px)");
 
   const create = useMutation(api.documents.create);
@@ -161,7 +163,7 @@ export default function Navigation() {
         </div>
         <div className="mt-4">
           <DocumentList />
-          <Item onClick={handleCreate} label="New page" icon={Plus} />
+          <Item onClick={handleCreate} label="Add a page" icon={Plus} />
 
           <Popover>
             <PopoverTrigger className="w-full mt-4">
@@ -188,15 +190,19 @@ export default function Navigation() {
           isResetting && "transition-all ease-in-out duration-300",
           isMobile && "left-0 w-full"
         )}>
-        <nav className="bg-transparent px-3 py-2 w-full">
-          {isCollapsed && (
-            <MenuIcon
-              onClick={resetWidth}
-              role="button"
-              className="w-6 h-6 text-muted-foreground"
-            />
-          )}
-        </nav>
+        {!!params.documentId ? (
+          <Navbar isCollapsed={isCollapsed} onResetWidth={resetWidth} />
+        ) : (
+          <nav className="bg-transparent px-3 py-2 w-full">
+            {isCollapsed && (
+              <MenuIcon
+                onClick={resetWidth}
+                role="button"
+                className="w-6 h-6 text-muted-foreground"
+              />
+            )}
+          </nav>
+        )}
       </div>
     </>
   );
