@@ -1,10 +1,13 @@
 import { Toaster } from "sonner";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import { SearchCommand } from "@/components/search-command";
+
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { ConvexClientProvider } from "@/components/providers/convex-provider";
-import { SearchCommand } from "@/components/search-command";
+import { ModalProvider } from "@/components/modals/modal-provider";
+
+import "./globals.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -50,6 +53,7 @@ export default function RootLayout({
             disableTransitionOnChange
             storageKey="jotion-theme">
             <Toaster position="bottom-center" />
+            <ModalProvider />
             <SearchCommand />
             {children}
           </ThemeProvider>
