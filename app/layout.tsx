@@ -4,6 +4,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { ConvexClientProvider } from "@/components/providers/convex-provider";
+import { SearchCommand } from "@/components/search-command";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -49,6 +50,7 @@ export default function RootLayout({
             disableTransitionOnChange
             storageKey="jotion-theme">
             <Toaster position="bottom-center" />
+            <SearchCommand />
             {children}
           </ThemeProvider>
         </ConvexClientProvider>
