@@ -5,7 +5,8 @@ import { BlockNoteView } from "@blocknote/mantine";
 import "@blocknote/mantine/style.css";
 import { useCreateBlockNote } from "@blocknote/react";
 import { useTheme } from "next-themes";
-import { useEffect } from "react";
+
+import { useEdgeStore } from "@/lib/edgestore";
 
 interface EditorProps {
   onChange: (content: string) => void;
@@ -19,10 +20,20 @@ export default function Editor({
   editable,
 }: EditorProps) {
   const { resolvedTheme } = useTheme();
+  const { edgestore } = useEdgeStore();
+
+  const handleUpload = async (file: File) => {
+    const res = await edgestore.publicFiles.upload({
+      file,
+    });
+
+    return res.url;
+  };
 
   // Initialize the editor with optional initial content
   const editor = useCreateBlockNote({
     initialContent: initialContent ? JSON.parse(initialContent) : undefined,
+    uploadFile: handleUpload,
   });
 
   return (
