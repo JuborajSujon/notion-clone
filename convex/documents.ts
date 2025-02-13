@@ -222,24 +222,56 @@ export const remove = mutation({
   },
 });
 
+// export const getSearch = query({
+//   handler: async (ctx) => {
+//     const identity = await ctx.auth.getUserIdentity();
+
+//     if (!identity) {
+//       throw new Error("Not authenticated");
+//     }
+
+//     const userId = identity.subject;
+
+//     const documents = await ctx.db
+//       .query("documents")
+//       .withIndex("userId", (q) => q.eq("userId", userId))
+//       .filter((q) => q.eq(q.field("isArchived"), false))
+//       .order("desc")
+//       .collect();
+
+//     return documents;
+//   },
+// });
+
 export const getSearch = query({
   handler: async (ctx) => {
-    const identity = await ctx.auth.getUserIdentity();
+    try {
+      // Get user identity
+      const identity = await ctx.auth.getUserIdentity();
 
-    if (!identity) {
-      throw new Error("Not authenticated");
+      // If user is not authenticated, return an empty list instead of throwing an error
+      if (!identity) {
+        console.warn(
+          "[getSearch] Unauthorized request - returning empty array."
+        );
+        return [];
+      }
+
+      const userId = identity.subject;
+
+      // Fetch documents efficiently using an indexed query
+      const documents = await ctx.db
+        .query("documents")
+        .withIndex("userId", (q) => q.eq("userId", userId))
+        .filter((q) => q.eq(q.field("isArchived"), false))
+        .order("desc")
+        .collect();
+
+      return documents;
+    } catch (error) {
+      console.error("[getSearch] Error fetching documents:", error);
+      throw new Error("Failed to fetch documents. Please try again later.");
     }
-
-    const userId = identity.subject;
-
-    const documents = await ctx.db
-      .query("documents")
-      .withIndex("userId", (q) => q.eq("userId", userId))
-      .filter((q) => q.eq(q.field("isArchived"), false))
-      .order("desc")
-      .collect();
-
-    return documents;
   },
 });
 
