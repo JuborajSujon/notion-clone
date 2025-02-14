@@ -53,6 +53,14 @@ export default function DocumentIdPage({ params }: DocumentIdPageProps) {
   if (document === null) {
     return <div>Document not found</div>;
   }
+
+  if (!document.isPublished) {
+    return (
+      <div className="flex items-center justify-center h-full text-3xl">
+        <h1>This document is not published</h1>
+      </div>
+    );
+  }
   return (
     <div className="pb-40">
       <Cover preview url={document.coverImage} />

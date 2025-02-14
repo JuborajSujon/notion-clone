@@ -243,26 +243,44 @@ export const remove = mutation({
 //   },
 // });
 
+// export const getSearch = query({
+//   handler: async (ctx) => {
+//     try {
+//       // Get user identity
+//       const identity = await ctx.auth.getUserIdentity();
+
+//       // If user is not authenticated, return an empty list instead of throwing an error
+//       if (!identity) {
+//         console.warn(
+//           "[getSearch] Unauthorized request - returning empty array."
+//         );
+//         return [];
+//       }
+
+//       const userId = identity.subject;
+
+//       // Fetch documents efficiently using an indexed query
+//       const documents = await ctx.db
+//         .query("documents")
+//         .withIndex("userId", (q) => q.eq("userId", userId))
+//         .filter((q) => q.eq(q.field("isArchived"), false))
+//         .order("desc")
+//         .collect();
+
+//       return documents;
+//     } catch (error) {
+//       console.error("[getSearch] Error fetching documents:", error);
+//       throw new Error("Failed to fetch documents. Please try again later.");
+//     }
+//   },
+// });
+
 export const getSearch = query({
   handler: async (ctx) => {
     try {
-      // Get user identity
-      const identity = await ctx.auth.getUserIdentity();
-
-      // If user is not authenticated, return an empty list instead of throwing an error
-      if (!identity) {
-        console.warn(
-          "[getSearch] Unauthorized request - returning empty array."
-        );
-        return [];
-      }
-
-      const userId = identity.subject;
-
-      // Fetch documents efficiently using an indexed query
+      // Fetch all non-archived documents
       const documents = await ctx.db
         .query("documents")
-        .withIndex("userId", (q) => q.eq("userId", userId))
         .filter((q) => q.eq(q.field("isArchived"), false))
         .order("desc")
         .collect();
@@ -278,13 +296,13 @@ export const getSearch = query({
 export const getById = query({
   args: { documentId: v.id("documents") },
   handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity();
+    // const identity = await ctx.auth.getUserIdentity();
 
-    if (!identity) {
-      throw new Error("Not authenticated");
-    }
+    // if (!identity) {
+    //   throw new Error("Not authenticated");
+    // }
 
-    const userId = identity.subject;
+    // const userId = identity.subject;
 
     const document = await ctx.db.get(args.documentId);
 
@@ -296,9 +314,9 @@ export const getById = query({
       return document;
     }
 
-    if (document.userId !== userId) {
-      throw new Error("Not authorized");
-    }
+    // if (document.userId !== userId) {
+    //   throw new Error("Not authorized");
+    // }
 
     return document;
   },
