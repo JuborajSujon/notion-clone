@@ -1,6 +1,12 @@
 "use client";
 
-import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogHeader,
+  DialogDescription,
+} from "@/components/ui/dialog";
 
 import { useCoverImage } from "@/hooks/use-cover-image";
 import { SingleImageDropzone } from "../single-image-dropzone";
@@ -10,7 +16,6 @@ import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useParams } from "next/navigation";
 import { Id } from "@/convex/_generated/dataModel";
-import { File } from "lucide-react";
 
 export default function CoverImageModal() {
   const params = useParams();
@@ -57,7 +62,12 @@ export default function CoverImageModal() {
     <Dialog open={coverImage.isOpen} onOpenChange={coverImage.onClose}>
       <DialogContent>
         <DialogHeader>
-          <h2 className="text-center text-lg font-semibold">Cover Image</h2>
+          <DialogTitle className="text-center text-lg font-semibold">
+            Cover Image
+          </DialogTitle>
+          <DialogDescription className="text-center">
+            Upload a cover image for your document
+          </DialogDescription>
         </DialogHeader>
         <SingleImageDropzone
           className="w-full outline-none"
